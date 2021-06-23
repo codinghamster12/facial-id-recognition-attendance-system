@@ -1,0 +1,13 @@
+body {
+  background-color: #800020;
+}
+.hero-image {
+  background-image: url("../../../assets/camera.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; /*i think its better to use contain if you;re using a large png*/
+  /* min-height: 100%;
+  min-width: 100%; */
+  overflow:visible;
+  opacity:0.2;
+}

@@ -1,0 +1,10 @@
+**/*.pyc
+**/__pycache__
+**/migrations
+app/api/dataset
+db.sqlite3
+node_modules
+build
+package-lock.json
+fyp
+app/api/.env
