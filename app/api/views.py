@@ -111,6 +111,7 @@ class EnrollStudentView(APIView):
         else:
             print('error', enroll_serializer.errors)
             return Response(enroll_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 @api_view(['POST'])
 def update_attendance(request):
     serializer = AttendancePOSTSerializer(data=request.data)

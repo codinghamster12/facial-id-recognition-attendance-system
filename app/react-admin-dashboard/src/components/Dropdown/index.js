@@ -12,7 +12,7 @@ import CIcon from "@coreui/icons-react";
 const Dropdown = (props) => {
   return (
     <CDropdown>
-      <CDropdownToggle color="secondary">
+      <CDropdownToggle color="primary">
       <CIcon name={props.icon} className="mfe-2" />{props.label}</CDropdownToggle>
       <CDropdownMenu>
         {props.items.map((item) => {

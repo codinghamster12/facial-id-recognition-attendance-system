@@ -1,1 +1,14 @@
 // Variable overrides
+// Your variable overrides
+$header-light-bg: #323030;
+$header-light-border: #323030;
+$table-head-bg: #2e2c2c;
+$table-head-color: #fff;
+$primary: #800020;
+$body-bg: #6b0f1a;
+
+
+
+
+// CoreUI and its default variables
+@import "../../node_modules/@coreui/coreui/scss/coreui";

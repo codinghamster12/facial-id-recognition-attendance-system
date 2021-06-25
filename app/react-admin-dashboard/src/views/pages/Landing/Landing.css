@@ -1,0 +1,24 @@
+body {
+    background-color: #6b0f1a;
+    background-image: linear-gradient(315deg, #6b0f1a 0%, #b91372 74%);
+    
+  }
+
+  
+.curved-svg {
+
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    z-index: -1;
+
+    
+  
+  }
+
+  .heading{
+      color: #fff;
+      font-size: 44px;
+      text-align: left;
+      letter-spacing: 0.5rem;
+  }

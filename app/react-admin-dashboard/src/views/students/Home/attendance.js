@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendance } from "../../../actions";
 import Table from "../../../components/Table";
@@ -7,14 +7,12 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
+  tableRow:{
+    fontSize: '16px',
+    letterSpacing: '0.1rem'
+    
+  }
+ 
 }));
 
 const Attendance = (res) => {
@@ -22,7 +20,9 @@ const Attendance = (res) => {
   const data = useSelector((state) => state.attendance);
   const classes = useSelector((state) => state.class);
   const id = res.match.params["id"];
-  let obj = {};
+  const [classObj, setClassObj] = useState({});
+  const styles= useStyles();
+
 
   // var course,course_credit,stclass;
   // var prof;
@@ -47,51 +47,72 @@ const Attendance = (res) => {
   // //   return { name, calories, fat, carbs, protein };
   // // }
 
-  const classInfo = () => {
+  // useEffect(async () => {
+  //   await classInfo()
+  //  }, [])
+
+  const user = localStorage.getItem("user");
+
+  useEffect(() => {
+    console.log(user);
+    console.log(id);
+    dispatch(getAttendance(user, id));
+    classInfo();
+
+
+  }, []);
+
+
+
+  const classInfo =  () => {
+    let classObj={}
     const c = classes.classes.find((x) => x.id == id);
 
     // for (let c in classes.classes) {
 
     //   if (c.id === id) {
 
-    obj["title"] = c.crs_id.crs_title;
-    obj["crs_credit"] = c.crs_id.crs_credit;
-    obj["prof_name"] = `${c.prof_id.first_name} ${c.prof_id.last_name}`;
-    obj["section"] = c.class_section;
-    obj["semester"] = c.class_semester;
+    classObj["TITLE"] = c.crs_id.crs_title;
+    classObj["COURSE CREDIT"] = c.crs_id.crs_credit;
+    classObj["PROFESSOR"] = `${c.prof_id.first_name} ${c.prof_id.last_name}`;
+    classObj["CLASS"] = `BSE ${c.class_semester} ${c.class_section}`
+  
+
+    setClassObj(classObj)
+
 
     //   }
     // }
-    console.log(obj);
+    // console.log(obj);
   };
 
-  const user = localStorage.getItem("user");
 
-  useEffect(() => {
-    console.log(id);
+  // useEffect(() => {
+    
+  //   console.log(id);
 
-    dispatch(getAttendance(user, id));
-    console.log(data);
-  }, []);
+  //   dispatch(getAttendance(user, id));
+  //   console.log(data);
+  // }, []);
 
   const columns = [
-    { id: "date", label: "Date", minWidth: 170 },
+    { id: "date", label: "DATE", minWidth: 170 },
 
     {
       id: "totalHours",
-      label: "Total Hours",
+      label: "TOTAL HOURS",
       minWidth: 170,
       align: "right",
     },
     {
       id: "presentHours",
-      label: "Present Hours",
+      label: "PRESENT HOURS",
       minWidth: 170,
       align: "right",
     },
     {
       id: "absentHours",
-      label: "Absent Hours",
+      label: "ABSENT HOURS",
       minWidth: 170,
       align: "right",
     },
@@ -138,71 +159,32 @@ const Attendance = (res) => {
 
   return (
     <>
-      <div className="table">
+      <div style={{background: '#ffe9ec'}} className="table">
         <table className="table table-hover">
           <tbody>
-            <tr>
-              <th>Key</th>
-              <th>Value</th>
-            </tr>
+            
+            {Object.keys(classObj).map((key) => {
+              return(
+                
+                <tr className={styles.tableRow}>
+                  <th key={`tablevalue-${key}`}>{key}</th>
+                  <td key={`tablevalue-${classObj[key]}`}>{classObj[key]}</td>
+                </tr>
+              )
 
-            {/* {obj.map(({ key, value }) => (
-              <tr className="table-row">
-                <td key={`tablevalue-${key}`}>{key}</td>
-                <td key={`tablevalue-${value}`}>{value}</td>
-              </tr>
-            ))} */}
-            {console.log('object print', obj)}
-
-            {Object.entries(obj).forEach(([key, value]) => {
-              console.log(`Key value pairs ${key} ${value}`); // "a 5", "b 7", "c 9"
             })}
+            
+            {/* {classObj.title} */}
+        
+           
           </tbody>
         </table>
       </div>
       <br />
       <Table columns={columns} rows={rows}></Table>
-      {/* <CRow>
-        <CCol xs="12" lg="12">
-          <CCard>
-            <CCardHeader>
-              Student Attendance
-             
-            </CCardHeader>
-
-            <CCardBody>
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
-                  <tr color="gradient-primary">
-                    <th>Date</th>
-                    <th>Attendance</th>
-                   
-                   
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {data.attendance.map(({ id,currDate,isEntered }) => (
-                    <tr key={id}>
-                      <td>
-                        <div>{currDate}</div>
-                      </td>
-                      <td>
-                        <div>{isEntered?1:0}</div>
-                      </td>
-                     
-                     
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow> */}
-
+      {/* {classInfo()} */}
       {makeRows()}
-      {classInfo()}
+    
     </>
   );
 };

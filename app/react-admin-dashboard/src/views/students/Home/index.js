@@ -45,31 +45,32 @@ const Dashboard = (props) => {
 
   return (
     <>
-      <CRow>
-        <CCol xs="12" lg="12">
+      <CRow className="justify-content-center">
+        <CCol xs="12" lg="10">
           <CCard>
-            <CCardHeader style={{fontSize: '28px', fontWeight: 700}}>
+            <CCardHeader style={{fontSize: '28px', fontWeight: 700, letterSpacing: '0.2rem'}}>
               Registered Classes
               <br/>
               <CButton
                 type="button"
                 size="sm"
-                color="dark"
+                color="info"
                 onClick={enrollClass}
+                style={{letterSpacing: '0.2rem'}}
               >
-                <CIcon name="cil-plus"/> Enroll
+                <CIcon name="cil-plus"/> ENROLL
               </CButton>
             </CCardHeader>
 
             <CCardBody>
               <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
+                <thead style={{letterSpacing: '0.2rem', fontSize: '16px', fontWeight: 100}} className="thead-light">
                   <tr color="gradient-primary">
-                    <th>Course Title</th>
-                    <th>Credit Hours</th>
-                    <th>Class</th>
-                    <th>Professor Name</th>
-                    <th>Activity</th>
+                    <th>TITLE</th>
+                    <th>CREDIT HOURS</th>
+                    <th>CLASS</th>
+                    <th>PROFESSOR</th>
+                    <th>ACTIVITY</th>
                   </tr>
                 </thead>
 
@@ -101,8 +102,9 @@ const Dashboard = (props) => {
                             onClick={() => viewAttendance(id)}
                             size="sm"
                             color="primary"
+                            style={{letterSpacing: '0.2rem'}}
                           >
-                            <CIcon content={freeSet.cilEye} /> View Attendance
+                            <CIcon content={freeSet.cilEye} /> VIEW
                           </CButton>
                         </td>
                       </tr>

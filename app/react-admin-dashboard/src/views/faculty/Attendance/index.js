@@ -23,29 +23,29 @@ const Attendance = (res) => {
   }, []);
 
   const columns = [
-    { id: "fullName", label: "Name", minWidth: 170 },
+    { id: "fullName", label: "NAME", minWidth: 170 },
 
     {
       id: "totalHours",
-      label: "Total Hours",
+      label: "TOTAL HOURS",
       minWidth: 170,
       align: "right",
     },
     {
       id: "presentHours",
-      label: "Present Hours",
+      label: "PRESENT HOURS",
       minWidth: 170,
       align: "right",
     },
     {
       id: "absentHours",
-      label: "Absent Hours",
+      label: "ABSENT HOURS",
       minWidth: 170,
       align: "right",
     },
     {
       id: "percent_attd",
-      label: "Percentage Attendance",
+      label: "PERCENTAGE ATTENDANCE",
       minWidth: 170,
       align: "right",
       format: (value) => value.toFixed(2),
@@ -118,13 +118,18 @@ const Attendance = (res) => {
 
   return (
     <>
-      <Dropdown
-        label={"Filter Pupils"}
+    <div className="d-flex justify-content-around">
+    <Dropdown
+        label={"FILTER"}
         icon={"cil-filter"}
         items={items}
         filter={filter}
-        style={{ float: "right" }}
+        
       ></Dropdown>
+    </div>
+    <br/>
+    <br/>
+  
        
       {filteredRows.length > 0 ?<Table columns={columns} rows={filteredRows}></Table> :<Table columns={columns} rows={rows}></Table>}
       {makeRows(data.attendance)}

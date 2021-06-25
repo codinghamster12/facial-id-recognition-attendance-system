@@ -1,6 +1,7 @@
 import React, { Component, useEffect } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
+import './App.css'
 import { useDispatch, useSelector } from "react-redux";
 import { getClasses, isUserLoggedIn } from "./actions";
 import PrivateRoute from './views/HOC/PrivateRoute'
@@ -21,6 +22,8 @@ const Login = React.lazy(() => import("./views/pages/login/Login"));
 const Register = React.lazy(() => import("./views/pages/register/Register"));
 const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
+const Landing = React.lazy(() => import("./views/pages/Landing/Landing"));
+
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +44,12 @@ function App() {
     <HashRouter>
       <React.Suspense fallback={loading}>
         <Switch>
+        <Route
+            exact
+            path="/landing"
+            name="Landing Page"
+            render={(props) => <Landing {...props} />}
+          />
           <Route
             exact
             path="/login"

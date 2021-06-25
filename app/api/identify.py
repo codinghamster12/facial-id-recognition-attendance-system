@@ -1,4 +1,4 @@
-from api.send_email import email
+
 import cognitive_face as CF
 from datetime import date
 from .global_variables import personGroupId

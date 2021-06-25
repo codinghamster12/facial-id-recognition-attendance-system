@@ -76,23 +76,23 @@ const Enroll = () => {
     return (
     
        <>
-      <CRow>
-        <CCol xs="12" lg="12">
+      <CRow className="justify-content-center">
+        <CCol xs="12" lg="10">
           <CCard>
-            <CCardHeader>
+            <CCardHeader style={{fontSize: '28px', fontWeight: 700, letterSpacing: '0.2rem'}}>
               Register Courses
               
             </CCardHeader>
 
             <CCardBody>
               <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
+                <thead style={{letterSpacing: '0.2rem', fontSize: '16px', fontWeight: 100}} className="thead-light">
                   <tr color="gradient-primary">
-                    <th>Course Title</th>
-                    <th>Credit Hours</th>
-                    <th>Class</th>
-                    <th>Professor Name</th>
-                    <th>Activity</th>
+                    <th>TITLE</th>
+                    <th>CREDIT HOURS</th>
+                    <th>CLASS</th>
+                    <th>PROFESSOR</th>
+                    <th>ACTIVITY</th>
                   </tr>
                 </thead>
 
