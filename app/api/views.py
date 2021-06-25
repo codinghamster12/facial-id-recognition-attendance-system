@@ -110,26 +110,31 @@ class EnrollStudentView(APIView):
             return Response(enroll_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print('error', enroll_serializer.errors)
-            return Response(enroll_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['POST'])
-def update_attendance(request):
-    serializer = AttendancePOSTSerializer(data=request.data)
-    print(serializer)
-    if serializer.is_valid():
-        student_id = serializer.validated_data['student_id']
-        class_id = serializer.validated_data['class_id']
-        currDate = serializer.validated_data['currDate']
-        isEntered = serializer.validated_data['isEntered']
 
-        attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=isEntered )
-        if not attd:
-            serializer.save()
+            return Response(enroll_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['PUT'])
+def update_attendance(request, *args, **kwargs):
+    data = request.data
+    print(data)
+    att_id = [i['id'] for i in data]
+    # self.validate_ids(att_id)
+    instances = []
+    for temp_dict in data:
+        id = temp_dict['id']
+       
+        isEntered= temp_dict['isEntered']
+        obj = StudentAttendance.objects.get(id=id)
+        print(obj)
         
-            
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        print('error', serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        obj.isEntered= isEntered
+       
+        
+       
+        obj.save()
+        instances.append(obj)
+    serializer = AttendancePOSTSerializer(instances, many=True)
+    return Response(serializer.data)
+  
 
 
 
@@ -188,6 +193,16 @@ class ExportCSVStudents(APIView):
         response['Content-Disposition'] = 'attachment; filename=%s' % str(file_name) 
         email(file_name)
         return response
+
+class SendEmail(APIView):
+
+    def get(self, request, *args, **kwargs):
+        id= self.kwargs['id']
+        todayDate= date.today()
+        obj = StudentAttendance.objects.filter(class_id=id,currDate=todayDate,isEntered=False)
+        email(obj)
+        return Response("Send email successfully")
+       
     
 class ViewAttendance(ListAPIView):
     serializer_class = AttendanceGETSerializer
