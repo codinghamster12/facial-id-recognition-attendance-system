@@ -1,16 +1,15 @@
 body {
   background-color: #6b0f1a;
   background-image: linear-gradient(315deg, #6b0f1a 0%, #b91372 74%);
-  
 }
 
 .curved-svg {
 
-  position: fixed;
-  bottom: 0;
-  width:100%;
-  z-index: -1;
-
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    z-index: -1;
   
-
-}
+    
+  
+  }

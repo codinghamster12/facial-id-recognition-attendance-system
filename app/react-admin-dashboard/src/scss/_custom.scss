@@ -1,1 +1,9 @@
-// Here you can add other styles
+// Your variable overrides
+@import "variables";
+
+
+
+
+// CoreUI and its default variables
+
+@import "../../node_modules/@coreui/coreui/scss/coreui";

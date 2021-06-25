@@ -112,19 +112,20 @@ class EnrollStudentView(APIView):
             print('error', enroll_serializer.errors)
 
             return Response(enroll_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['PUT'])
-def update_attendance(request, *args, **kwargs):
-    data = request.data
-    print(data)
-    att_id = [i['id'] for i in data]
-    # self.validate_ids(att_id)
-    instances = []
-    for temp_dict in data:
-        id = temp_dict['id']
-       
-        isEntered= temp_dict['isEntered']
-        obj = StudentAttendance.objects.get(id=id)
-        print(obj)
+            
+@api_view(['POST'])
+def update_attendance(request):
+    serializer = AttendancePOSTSerializer(data=request.data)
+    print(serializer)
+    if serializer.is_valid():
+        student_id = serializer.validated_data['student_id']
+        class_id = serializer.validated_data['class_id']
+        currDate = serializer.validated_data['currDate']
+        isEntered = serializer.validated_data['isEntered']
+
+        attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=isEntered )
+        if not attd:
+            serializer.save()
         
         obj.isEntered= isEntered
        
