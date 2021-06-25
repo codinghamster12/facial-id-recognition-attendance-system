@@ -193,6 +193,16 @@ class ExportCSVStudents(APIView):
         response['Content-Disposition'] = 'attachment; filename=%s' % str(file_name) 
         email(file_name)
         return response
+
+class SendEmail(APIView):
+
+    def get(self, request, *args, **kwargs):
+        id= self.kwargs['id']
+        todayDate= date.today()
+        obj = StudentAttendance.objects.filter(class_id=id,currDate=todayDate,isEntered=False)
+        email(obj)
+        return Response("Send email successfully")
+       
     
 class ViewAttendance(ListAPIView):
     serializer_class = AttendanceGETSerializer

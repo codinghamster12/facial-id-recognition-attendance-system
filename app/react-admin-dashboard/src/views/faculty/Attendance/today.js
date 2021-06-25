@@ -1,87 +1,94 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { CButton } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import Modal from "../../../components/Modals";
-import { useSelector, useDispatch } from "react-redux";
-import { getTodayAttendance, Updateattendance } from "../../../actions";
-import axios from "../../../helpers/axios";
+import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { CButton } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import Modal from '../../../components/Modals'
+import { useSelector, useDispatch } from 'react-redux'
+import { getTodayAttendance, Updateattendance } from '../../../actions'
+import axios from '../../../helpers/axios'
 
 const TodayAttendance = (res) => {
-  const data = useSelector((state) => state.classAttendance);
-  const [show, setShow] = useState(false);
+  const data = useSelector((state) => state.classAttendance)
+  const [show, setShow] = useState(false)
 
-  console.log(data);
-  const [targets, setTargets] = React.useState({});
-  const dispatch = useDispatch();
-  const id = res.match.params["id"];
-  var attendance_list = [];
+  console.log(data)
+  const [targets, setTargets] = React.useState({})
+  const dispatch = useDispatch()
+  const id = res.match.params['id']
+  var attendance_list = []
 
   const handleChange = (e, id) => {
     // setTargets({
     //   ...targets,
     //   [`${e.target.name}`]: e.target.value,
-    var obj = {};
-    var isEntered = e.target.value == `present${id}` ? true : false;
-    obj["id"] = id;
-    obj["isEntered"] = isEntered;
-    attendance_list.push(obj);
-    console.log(attendance_list);
-  };
+    var obj = {}
+    var isEntered = e.target.value == `present${id}` ? true : false
+    obj['id'] = id
+    obj['isEntered'] = isEntered
+    attendance_list.push(obj)
+    console.log(attendance_list)
+  }
 
   const handleClickOpen = () => {
-    setShow(true);
-  };
+    setShow(true)
+  }
 
   const displayModal = () => {
     return (
-      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"}>
+      <Modal show={show} setShow={setShow} color={'success'} title={'SUCCESS'}>
         Attendance updated successfully
       </Modal>
-    );
-  };
+    )
+  }
 
   const updateAttendance = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token')
 
     const headers = {
       Authorization: `Token ${token}`,
-    };
+    }
 
     axios
       .put(`/classes/updateattendance/`, attendance_list, { headers: headers })
       .then((res) => {
-        console.log(res);
+        console.log(res)
         if (res.status == 200) {
-          handleClickOpen();
+          handleClickOpen()
         }
       })
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+
+    axios
+      .get(`/classes/sendemail/${id}/`, { headers: headers })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => console.log(err))
+  }
 
   useEffect(() => {
-    console.log(id);
-    dispatch(getTodayAttendance(id));
-    console.log(data);
-  }, []);
+    console.log(id)
+    dispatch(getTodayAttendance(id))
+    console.log(data)
+  }, [])
 
   const useStyles = makeStyles({
     table: {
       minWidth: 650,
     },
-  });
+  })
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <>
@@ -126,7 +133,7 @@ const TodayAttendance = (res) => {
                   {/* <TableCell align="right">{row.carbs}</TableCell>
               <TableCell align="right">{row.protein}</TableCell> */}
                 </TableRow>
-              );
+              )
             })}
           </TableBody>
         </Table>
@@ -136,13 +143,13 @@ const TodayAttendance = (res) => {
         size="md"
         color="primary"
         onClick={updateAttendance}
-        style={{ float: "right", marginTop: "10px" }}
+        style={{ float: 'right', marginTop: '10px' }}
       >
         <CIcon name="cil-scrubber" /> Submit
-      </CButton>{" "}
+      </CButton>{' '}
       {displayModal()}
     </>
-  );
-};
+  )
+}
 
-export default TodayAttendance;
+export default TodayAttendance

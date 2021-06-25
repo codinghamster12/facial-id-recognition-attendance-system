@@ -1,33 +1,30 @@
-import smtplib, ssl
+
 import pandas as pd
 import time
 import sqlite3
+import smtplib,ssl
+
 
 
 currentDate = time.strftime("%d_%m_%y")
 
-def email(filename):
-    df = pd.read_excel(filename)
-    print(df)
-    reg=[]
+def email(obj):
+   
+    print(obj)
     emails=[]
 
-    col = df[currentDate]
-
-    for i,row in col.iteritems():
-        if row==0:
-            reg.append(df['Registration_No'][i])
-            print(df['Registration_No'][i])
-
+  
+  
     conn = sqlite3.connect('./db.sqlite3')
     c = conn.cursor()
 
-    for r in reg:
-        c.execute("SELECT email from users_student us where us.registration_no= %s"%r)
+    for i in obj:
+        c.execute("SELECT email from users_student us where us.user_id= %s"%i.student_id_id)
         a = c.fetchone()
         
         emails.append(a[0])
 
+    print(emails)
 
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
@@ -35,7 +32,8 @@ def email(filename):
     # receiver_email = "bushraakram128@gmail.com"  # Enter receiver address
     password = 'codinggg1234$'
     message = """\
-    Subject: Hi there
+    Subject: Marked absent
+
 
     Your child was not present today."""
 
@@ -45,3 +43,4 @@ def email(filename):
         server.login(sender_email, password)
         for reciever in emails:
             server.sendmail(sender_email, reciever, message)
+    
