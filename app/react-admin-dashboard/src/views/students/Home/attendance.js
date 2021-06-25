@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAttendance } from "../../../actions";
-import Table from "../../../components/Table";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAttendance } from '../../../actions'
+import Table from '../../../components/Table'
+import { makeStyles } from '@material-ui/core/styles'
+import { CChartDoughnut } from '@coreui/react-chartjs'
+import Modal from '../../../components/Modals'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import { CButton } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,17 +16,18 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-}));
+}))
 
 const Attendance = (res) => {
-  const dispatch = useDispatch();
-  const data = useSelector((state) => state.attendance);
-  const classes = useSelector((state) => state.class);
-  const id = res.match.params["id"];
-  let obj = {};
+  const dispatch = useDispatch()
+  const data = useSelector((state) => state.attendance)
+  const classes = useSelector((state) => state.class)
+  const id = res.match.params['id']
+  const [show, setShow] = useState(false)
+  let obj = {}
 
   // var course,course_credit,stclass;
   // var prof;
@@ -48,70 +53,107 @@ const Attendance = (res) => {
   // // }
 
   const classInfo = () => {
-    const c = classes.classes.find((x) => x.id == id);
+    const c = classes.classes.find((x) => x.id == id)
 
     // for (let c in classes.classes) {
 
     //   if (c.id === id) {
 
-    obj["title"] = c.crs_id.crs_title;
-    obj["crs_credit"] = c.crs_id.crs_credit;
-    obj["prof_name"] = `${c.prof_id.first_name} ${c.prof_id.last_name}`;
-    obj["section"] = c.class_section;
-    obj["semester"] = c.class_semester;
+    obj['title'] = c.crs_id.crs_title
+    obj['crs_credit'] = c.crs_id.crs_credit
+    obj['prof_name'] = `${c.prof_id.first_name} ${c.prof_id.last_name}`
+    obj['section'] = c.class_section
+    obj['semester'] = c.class_semester
 
     //   }
     // }
-    console.log(obj);
-  };
+    console.log(obj)
+  }
 
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem('user')
 
   useEffect(() => {
-    console.log(id);
+    console.log(id)
 
-    dispatch(getAttendance(user, id));
-    console.log(data);
-  }, []);
+    dispatch(getAttendance(user, id))
+    console.log(data)
+  }, [])
 
   const columns = [
-    { id: "date", label: "Date", minWidth: 170 },
+    { id: 'date', label: 'Date', minWidth: 170 },
 
     {
-      id: "totalHours",
-      label: "Total Hours",
+      id: 'totalHours',
+      label: 'Total Hours',
       minWidth: 170,
-      align: "right",
+      align: 'right',
     },
     {
-      id: "presentHours",
-      label: "Present Hours",
+      id: 'presentHours',
+      label: 'Present Hours',
       minWidth: 170,
-      align: "right",
+      align: 'right',
     },
     {
-      id: "absentHours",
-      label: "Absent Hours",
+      id: 'absentHours',
+      label: 'Absent Hours',
       minWidth: 170,
-      align: "right",
+      align: 'right',
     },
-  ];
+  ]
+
+  let counta = 0
+  let countb = 0
+  let count = []
   const createRows = (date, totalHours, presentHours, absentHours) => {
-    return { date, totalHours, presentHours, absentHours };
-  };
+    counta += presentHours
+    countb += absentHours
 
-  const rows = [];
+    return { date, totalHours, presentHours, absentHours }
+  }
+
+  const doughnut = {
+    labels: ['Present Hours', 'Absent Hours'],
+    datasets: [
+      {
+        data: count,
+
+        backgroundColor: ['#FF6384', '#36A2EB'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB'],
+      },
+    ],
+  }
+
+  const rows = []
 
   const makeRows = () => {
     data.attendance.map((row) => {
-      const { currDate, isEntered } = row;
-      const totalHours = 1;
-      const presentHours = isEntered ? 1 : 0;
-      const absentHours = isEntered ? 0 : 1;
+      const { currDate, isEntered } = row
+      const totalHours = 1
+      const presentHours = isEntered ? 1 : 0
+      const absentHours = isEntered ? 0 : 1
 
-      rows.push(createRows(currDate, totalHours, presentHours, absentHours));
-    });
-  };
+      rows.push(createRows(currDate, totalHours, presentHours, absentHours))
+    })
+  }
+
+  const countfn = () => {
+    count.push(counta)
+    count.push(countb)
+    console.log(count)
+  }
+
+  const handleClickOpen = () => {
+    setShow(true)
+  }
+
+  const displayModal = () => {
+    return (
+      <Modal show={show} setShow={setShow} color={'secondary'} title={'Chart'}>
+        <CChartDoughnut datasets={doughnut.datasets} labels={doughnut.labels} />
+      </Modal>
+    )
+  }
 
   // const datarows = [
   //   {
@@ -155,13 +197,24 @@ const Attendance = (res) => {
             {console.log('object print', obj)}
 
             {Object.entries(obj).forEach(([key, value]) => {
-              console.log(`Key value pairs ${key} ${value}`); // "a 5", "b 7", "c 9"
+              console.log(`Key value pairs ${key} ${value}`) // "a 5", "b 7", "c 9"
             })}
           </tbody>
         </table>
       </div>
       <br />
+      <CButton
+        type="submit"
+        size="md"
+        color="secondary"
+        onClick={handleClickOpen}
+        style={{ float: 'left' }}
+      >
+        <CIcon name="cil-scrubber" />
+        View Chart
+      </CButton>
       <Table columns={columns} rows={rows}></Table>
+
       {/* <CRow>
         <CCol xs="12" lg="12">
           <CCard>
@@ -203,8 +256,10 @@ const Attendance = (res) => {
 
       {makeRows()}
       {classInfo()}
+      {countfn()}
+      {displayModal()}
     </>
-  );
-};
+  )
+}
 
-export default Attendance;
+export default Attendance
