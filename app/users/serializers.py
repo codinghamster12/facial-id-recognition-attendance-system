@@ -9,8 +9,8 @@ from .models import User, Student
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'is_student', 'is_teacher', 'first_name', 'last_name')
-        
+        fields = ('email', 'username', 'password', 'is_student',
+                  'is_teacher', 'first_name', 'last_name')
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -21,8 +21,8 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'is_student', 'is_teacher', 'first_name', 'last_name')
-        
+        fields = ('email', 'username', 'password', 'is_student',
+                  'is_teacher', 'first_name', 'last_name')
 
     def get_cleaned_data(self):
         return {
@@ -51,7 +51,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 class TokenSerializer(serializers.ModelSerializer):
     user_type = serializers.SerializerMethodField()
-    
 
     class Meta:
         model = Token
@@ -74,18 +73,20 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
-        
 
     def create(self, validated_data):
-        registration_no=validated_data.get('registration_no')
-        user= validated_data.get('user')
-        email= validated_data.get('email')
+        registration_no = validated_data.get('registration_no')
+        user = validated_data.get('user')
+        email = validated_data.get('email')
+        semester = validated_data.get('semester')
+        section = validated_data.get('section')
         student = Student.objects.create(
-            user= user,
-            email= email,
-            registration_no= registration_no
+            user=user,
+            email=email,
+            registration_no=registration_no,
+            semester= semester,
+            section= section
         )
         create_person(registration_no)
-       
-        
+
         return student

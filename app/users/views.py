@@ -17,6 +17,8 @@ class StudentViewset(viewsets.ModelViewSet):
     queryset= Student.objects.all()
     serializer_class= StudentSerializer
 
+    
+
 @api_view(['POST'])
 def takeImages(request):
     data= json.loads(request.body.decode("utf-8"))

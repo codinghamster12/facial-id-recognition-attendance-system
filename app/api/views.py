@@ -1,6 +1,8 @@
 from datetime import date
+from re import S
 import requests
 from api.snaps import take_snaps
+from spreadsheet import createReports
 from rest_framework.generics import ListAPIView
 from .send_email import email
 from .models import Class,Enroll, StudentAttendance
@@ -62,6 +64,7 @@ def mark_attendance(request):
     data= json.loads(request.body.decode("utf-8"))
     
     print(data)
+    createReports()
     take_snaps(data['id'],data['token'])
     # addImages(data['registration_no'])
     return Response('Attendance marked successfully')
@@ -112,22 +115,26 @@ class EnrollStudentView(APIView):
             print('error', enroll_serializer.errors)
 
             return Response(enroll_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-@api_view(['POST'])
-def update_attendance(request):
-    serializer = AttendancePOSTSerializer(data=request.data)
-    print(serializer)
-    if serializer.is_valid():
-        student_id = serializer.validated_data['student_id']
-        class_id = serializer.validated_data['class_id']
-        currDate = serializer.validated_data['currDate']
-        isEntered = serializer.validated_data['isEntered']
-
-        attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=isEntered )
-        if not attd:
-            serializer.save()
+@api_view(['PUT'])
+def update_attendance(request, *args, **kwargs):
+    data = request.data
+    print(data)
+    att_id = [i['id'] for i in data]
+    # self.validate_ids(att_id)
+    instances = []
+    for temp_dict in data:
+        print(temp_dict)
+        id = temp_dict['id']
+       
+        isEntered= temp_dict['isEntered']
+        classatd= temp_dict['classatd']
+        obj = StudentAttendance.objects.get(id=id)
+        print(obj)
         
         obj.isEntered= isEntered
+        obj.classatd= classatd
+        
+        
        
         
        
@@ -136,17 +143,19 @@ def update_attendance(request):
     serializer = AttendancePOSTSerializer(instances, many=True)
     return Response(serializer.data)
   
-
-
-
+counts= dict()
 @api_view(['GET', 'POST'])
+
 def attendance_list(request):
+    
     if request.method == 'GET':
         attendances = StudentAttendance.objects.all()
         serializer = AttendanceGETSerializer(attendances, many=True)
         return Response(serializer.data)
-
+    
     elif request.method == 'POST':
+        global counts
+        global counter
         serializer = AttendancePOSTSerializer(data=request.data)
         print(serializer)
         if serializer.is_valid():
@@ -154,12 +163,21 @@ def attendance_list(request):
             class_id = serializer.validated_data['class_id']
             currDate = serializer.validated_data['currDate']
             isEntered = serializer.validated_data['isEntered']
+            classatd = serializer.validated_data['classatd']
 
-            attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=isEntered )
+            if(isEntered):
+                counts[student_id]= counts.get(student_id, 0) + 1
+            else:
+                counts[student_id] = counts.get(student_id, 0) + 0
+            
+            if(counts[student_id] >= 2):
+                attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=True, classatd= classatd)
+                
+            else:
+                attd= StudentAttendance.objects.filter(student_id=student_id, class_id=class_id, currDate=currDate).update(isEntered=False, classatd= classatd)
+            
             if not attd:
                 serializer.save()
-            
-                
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             print('error', serializer.errors)

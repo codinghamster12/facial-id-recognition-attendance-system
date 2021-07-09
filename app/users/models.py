@@ -18,10 +18,10 @@ class User(AbstractUser):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     registration_no= models.CharField(max_length=200)
-    email= models.EmailField(max_length=255, default='abc@hotmail.com', blank=True)
-    personID= models.CharField(max_length=200, default=0)
-    semester = models.IntegerField(blank=False, default=0)
-    section= models.CharField(blank=False, max_length=1, default='A')
+    email= models.EmailField(max_length=255)
+    personID= models.CharField(max_length=200, default=0, blank=True)
+    semester = models.IntegerField(blank=False,default=0)
+    section= models.CharField(blank=False, max_length=1,default='A')
 
 
     def __str__(self):

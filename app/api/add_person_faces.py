@@ -25,7 +25,7 @@ def get_person_id():
 	cmd = "SELECT * FROM users_student WHERE registration_no = " + extractId
 	c.execute(cmd)
 	row = c.fetchone()
-	person_id = row[4]
+	person_id = row[3]
     
 	connect.close()
 	return person_id
@@ -45,6 +45,7 @@ if len(sys.argv) is not 1:
             if len(res) != 1:
                 print ("No face detected in image")
             else:
+                print(person_id)
                 res = CF.person.add_face(imgurl, personGroupId, person_id)
                 print (res)
 

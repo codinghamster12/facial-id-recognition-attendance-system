@@ -38,6 +38,7 @@ class StudentAttendance(models.Model):
     class_id= models.ForeignKey(Class, on_delete=models.CASCADE)
     currDate= models.DateField(default=date.today)
     isEntered= models.BooleanField(default=False)
+    classatd=  models.FloatField(blank=False,default=0)
 
 
 

@@ -2,6 +2,7 @@
 **/__pycache__
 **/migrations
 app/api/dataset
+app/uploads
 db.sqlite3
 node_modules
 build

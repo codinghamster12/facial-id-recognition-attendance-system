@@ -151,29 +151,8 @@ const Attendance = (res) => {
 
   return (
     <>
-      <Dropdown
-        label={'Filter Pupils'}
-        icon={'cil-filter'}
-        items={items}
-        filter={filter}
-        style={{ float: 'right' }}
-      ></Dropdown>
-      <CButton
-        type="submit"
-        size="md"
-        color="secondary"
-        onClick={handleClickOpen}
-        style={{ float: 'left' }}
-      >
-        <CIcon name="cil-scrubber" />
-        View Chart
-      </CButton>
-      {filteredRows.length > 0 ? (
-        <Table columns={columns} rows={filteredRows}></Table>
-      ) : (
-        <Table columns={columns} rows={rows}></Table>
-      )}
-    <div className="d-flex justify-content-around">
+      
+    <div className="d-flex justify-content-start">
     <Dropdown
         label={"FILTER"}
         icon={"cil-filter"}
@@ -181,6 +160,18 @@ const Attendance = (res) => {
         filter={filter}
         
       ></Dropdown>
+      <CButton
+        type="submit"
+        size="md"
+        color="secondary"
+        onClick={handleClickOpen}
+        
+
+        
+      >
+        <CIcon name="cil-scrubber" />
+        VIEW CHART
+      </CButton>
       
     </div>
     <br/>

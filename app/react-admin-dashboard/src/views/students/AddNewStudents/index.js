@@ -41,11 +41,11 @@ const AddNewStudent = () => {
   const [Name, setName] = useState("");
   const [email_id, setEmailId] = useState("");
   const [registration_no, setRegistrationNo] = useState("");
-  const [Semester, setSemester] = useState("");
-  const [Section, setSection] = useState("");
-  const [Course_Name, setCourseName] = useState("");
-  const [Course_Id, setCourseId] = useState("");
+  const [semester, setSemester] = useState("");
+  const [section, setSection] = useState("");
+  // const [personID, setPersonId] = useState("");
   const [studentImages, setStudentImages] = useState([]);
+  const [image, setImage] = useState("");
   const student = useSelector((state) => state.student);
 
   const dispatch = useDispatch();
@@ -84,6 +84,10 @@ const AddNewStudent = () => {
     form.append("email",email_id)
     form.append("registration_no", registration_no);
     form.append("user", user);
+    form.append("semester", semester);
+    form.append("section", section);
+    // form.append("personID", personID);
+
     
     // form.append("Semester", Semester);
     // form.append("Section", Section);
@@ -117,6 +121,7 @@ const AddNewStudent = () => {
   };
 
   const addImages = () => {
+    setImage("1");
     const token= localStorage.getItem('token')
     // const headers= {
     //     'Authorization': `Token ${token}`
@@ -283,7 +288,7 @@ const AddNewStudent = () => {
             
       
             
-            <CButton type="submit" size="md" color="primary">
+            <CButton type="submit" size="md" color="primary" disabled={!image}>
               <CIcon name="cil-scrubber" /> Submit
             </CButton>{" "}
             {/* <CButton type="reset" size="sm" color="danger">

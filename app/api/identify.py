@@ -1,4 +1,3 @@
-
 import cognitive_face as CF
 from datetime import date
 from .global_variables import personGroupId
@@ -19,6 +18,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 currentDate = time.strftime("%d_%m_%y")
 
+
 def getDateColumn(sheet):
 	for i in range(1, sheet.max_column + 1):
 		col = get_column_letter(i)
@@ -26,6 +26,7 @@ def getDateColumn(sheet):
 			return col
 
 
+counts = dict()
 def openSheet(class_id,token):
 
     headers = { 'Authorization': 'Token {}'.format(token)}
@@ -98,7 +99,10 @@ def openSheet(class_id,token):
                 c.execute("SELECT user_id from  users_student sc where sc.id= %s"%rn)
                 user_id=c.fetchone()
                 print(user_id[0])
-                myobj={'student_id':user_id[0],'class_id':class_id,'currDate': date.today(),'isEntered':True}
+                counts[user_id[0]]= counts.get(user_id[0], 0) + 1
+                counter = counts.get(user_id[0], 0)/3 * 100
+                print(counter)
+                myobj={'student_id':user_id[0],'class_id':class_id,'currDate': date.today(),'isEntered':True, 'classatd':counter}
                 requests.post('http://127.0.0.1:8000/classes/view-attendance/',myobj,headers=headers)
                 
             else:
@@ -107,7 +111,9 @@ def openSheet(class_id,token):
                 sheet['%s%s' % (col, str(row))] = 0
                 c.execute("SELECT user_id from  users_student sc where sc.id= %s"%rn)
                 user_id=c.fetchone()
-                myobj={'student_id':user_id[0],'class_id':class_id,'currDate': date.today(),'isEntered':False}
+                counts[user_id[0]]= counts.get(user_id[0], 0) + 0
+                counter = counts.get(user_id[0], 0)/3 * 100
+                myobj={'student_id':user_id[0],'class_id':class_id,'currDate': date.today(),'isEntered':False,'classatd':counter}
                 requests.post('http://127.0.0.1:8000/classes/view-attendance/',myobj,headers=headers)
 
 

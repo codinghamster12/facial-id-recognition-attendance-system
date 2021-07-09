@@ -21,7 +21,7 @@ def take_snaps(class_id,token):
         cv2.imshow('frame', gray)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        if time.time() - start_time >= 5: #<---- Check if 5 sec passed
+        if time.time() - start_time >= 30: #<---- Check if 30 sec passed
             img_name = "opencv_frame_{}.png".format(img_counter)
             path= 'C:/Users/bisma/Documents/fyp/app/uploads'
             img_path= os.path.join(path, img_name)
