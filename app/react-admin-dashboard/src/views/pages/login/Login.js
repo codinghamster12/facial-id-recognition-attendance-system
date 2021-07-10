@@ -58,18 +58,26 @@ const Login = () => {
   };
 
   return (
-    <div style={{ marginTop: '120px'}} className="parent">
-      <CContainer style={{paddingTop: '50px'}}>
-        <CRow className="justify-content-center no-gutters" >
+    <div style={{ marginTop: "120px" }} className="parent">
+      <CContainer style={{ paddingTop: "50px" }}>
+        <CRow className="justify-content-center no-gutters">
           <CCol md="4">
-            <img src={facial} style={{ width: "100%", height: "100%", opacity: 0.7, borderRadius: '5px' }} ></img>
+            <img
+              src={facial}
+              style={{
+                width: "100%",
+                height: "100%",
+                opacity: 0.7,
+                borderRadius: "5px",
+              }}
+            ></img>
           </CCol>
           <CCol md="6">
             <CCardGroup style={{ width: "100%", height: "100%" }}>
-              <CCard className="p-4" >
+              <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={userLogin}>
-                    <h1 style={{fontSize: '40px', fontWeight: 700}}>Login</h1>
+                    <h1 style={{ fontSize: "40px", fontWeight: 700 }}>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
@@ -104,30 +112,29 @@ const Login = () => {
                         </CButton>
                       </CCol>
                       <CCol xs="8" className="text-right">
-                      <p style={{ fontsize: "30px" }} className="text-muted">
+                        <p style={{ fontsize: "30px" }} className="text-muted">
                           Haven't registered yet?
-                          </p>
+                        </p>
                         <CButton
                           color="link"
                           onClick={RegisterPage}
                           className="px-0"
                         >
                           Register
-                          
                         </CButton>
                       </CCol>
                     </CRow>
-                    {auth.error ? Object.values(auth.error)[0] : null}
-                   
+                    <div style={{ color: "red" }}>
+                      {auth.error ? Object.values(auth.error)[0] : null}
+                    </div>
                   </CForm>
                 </CCardBody>
               </CCard>
             </CCardGroup>
           </CCol>
         </CRow>
-      
       </CContainer>
-      
+
       <svg viewBox="0 0 1440 319" className="curved-svg">
         <path
           fill="#ffe9ec"
