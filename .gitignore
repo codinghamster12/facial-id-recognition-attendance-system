@@ -9,3 +9,4 @@ build
 package-lock.json
 fyp
 app/api/.env
+app/.env
