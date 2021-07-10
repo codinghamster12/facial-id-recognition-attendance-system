@@ -35,6 +35,10 @@ const Enroll = () => {
       setShow(true)
     }
 
+    function refreshPage() {
+      window.location.reload();
+    }
+
     const displayModal = () => {
       return(
         <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"}>Course registered successfully</Modal>
@@ -68,6 +72,8 @@ const Enroll = () => {
          
         })
         .catch((err) => console.log(err));
+
+    {refreshPage()}
   
      
     };
