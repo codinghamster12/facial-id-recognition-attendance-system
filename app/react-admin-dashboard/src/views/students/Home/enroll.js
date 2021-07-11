@@ -39,32 +39,49 @@ const Enroll = () => {
     );
   };
 
-  const enrollStudent = (e) => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+  
+    function refreshPage() {
+      window.location.reload();
+    }
 
-    const headers = {
-      Authorization: `Token ${token}`,
+   
+
+
+    const enrollStudent = (e) => {
+    
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+   
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+  
+      let form_data = new FormData();
+      form_data.append("student_id", user);
+      form_data.append("class_id", e.target.id);
+  
+      axios
+        .post(`/classes/enroll/enroll-student/`, form_data, { headers: headers })
+        .then((res) => {
+          // console.log(res.data);
+          // console.log(res)
+          if(res.status == 201){
+            handleClickOpen();
+          }
+          
+         
+        })
+        .catch((err) => console.log(err));
+
+    {refreshPage()}
+  
+     
     };
-
-    let form_data = new FormData();
-    form_data.append("student_id", user);
-    form_data.append("class_id", e.target.id);
-
-    axios
-      .post(`/classes/enroll/enroll-student/`, form_data, { headers: headers })
-      .then((res) => {
-        // console.log(res.data);
-        // console.log(res)
-        if (res.status == 201) {
-          handleClickOpen();
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
-  return (
-    <>
+  
+   
+    return (
+    
+       <>
       <CRow className="justify-content-center">
         <CCol xs="12" lg="10">
           <CCard>
