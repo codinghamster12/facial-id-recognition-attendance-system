@@ -96,7 +96,9 @@ const Register = () => {
                 <CCard className="mx-4">
                   <CCardBody className="p-4">
                     <CForm onSubmit={registerUser}>
-                      <h1 style={{fontSize: '40px', fontWeight: 700}}>Register</h1>
+                      <h1 style={{ fontSize: "40px", fontWeight: 700 }}>
+                        Register
+                      </h1>
                       <p className="text-muted">Create your account</p>
                       <CInputGroup className="mb-3">
                         <CInputGroupPrepend>
@@ -111,6 +113,10 @@ const Register = () => {
                           onChange={(e) => setUsername(e.target.value)}
                         />
                       </CInputGroup>
+                      <div style={{ color: "red" }}>
+                        {userstate.error ? userstate.error.username : null}
+                      </div>
+
                       <CFormGroup row className="my-0">
                         <CCol xs="6">
                           <CInputGroup className="mb-3">
@@ -126,6 +132,11 @@ const Register = () => {
                               onChange={(e) => setFirstname(e.target.value)}
                             />
                           </CInputGroup>
+                          <div style={{ color: "red" }}>
+                            {userstate.error
+                              ? userstate.error.first_name
+                              : null}
+                          </div>
                         </CCol>
                         <CCol xs="6">
                           <CInputGroup className="mb-3">
@@ -141,6 +152,9 @@ const Register = () => {
                               onChange={(e) => setLastname(e.target.value)}
                             />
                           </CInputGroup>
+                          <div style={{ color: "red" }}>
+                            {userstate.error ? userstate.error.last_name : null}
+                          </div>
                         </CCol>
                       </CFormGroup>
                       <CInputGroup className="mb-3">
@@ -154,6 +168,9 @@ const Register = () => {
                           onChange={(e) => setEmail(e.target.value)}
                         />
                       </CInputGroup>
+                      <div style={{ color: "red" }}>
+                        {userstate.error ? userstate.error.email : null}
+                      </div>
                       <CInputGroup className="mb-3">
                         <CInputGroupPrepend>
                           <CInputGroupText>
@@ -167,6 +184,9 @@ const Register = () => {
                           onChange={(e) => setPassword1(e.target.value)}
                         />
                       </CInputGroup>
+                      <div style={{ color: "red" }}>
+                        {userstate.error ? userstate.error.password1 : null}
+                      </div>
                       <CInputGroup className="mb-4">
                         <CInputGroupPrepend>
                           <CInputGroupText>
@@ -180,6 +200,12 @@ const Register = () => {
                           onChange={(e) => setPassword2(e.target.value)}
                         />
                       </CInputGroup>
+                      <div style={{ color: "red" }}>
+                        {userstate.error ? userstate.error.password2 : null}
+                        {userstate.error
+                          ? userstate.error.non_field_errors
+                          : null}
+                      </div>
                       <CInputGroup className="mb-4">
                         <CInputGroupPrepend>
                           <CInputGroupText>
