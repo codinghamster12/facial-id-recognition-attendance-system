@@ -133,6 +133,45 @@ export const studentUpdate = (id, form) => {
     }
 }
 
+export const getStudent = (id) => {
+    return async (dispatch) => {
+        dispatch({
+            type: studentConstants.GET_STUDENT_REQUEST
+        })
+
+        const token= localStorage.getItem('token')
+        const headers= {
+            'Authorization': `Token ${token}`
+        }
+
+        try{
+            const res= await axios.get(`/students/${id}`, { headers: headers })
+            if(res.status == 200){
+                console.log(res.data)
+                dispatch({
+                    type: studentConstants.GET_STUDENT_SUCCESS,
+                    payload:{
+                        student: res.data
+                        
+                    }
+                })
+            }
+        }
+        catch(error){
+            if(error.response.status == 404 || error.response.status == 400){
+                dispatch({
+                    type: studentConstants.GET_STUDENT_FAILURE,
+                    payload:{
+                        error: 'Something went wrong'
+                    }
+
+                })
+
+            }
+        }
+    }
+}
+
 export const studentDelete = (id) => {
     return async (dispatch) => {
         dispatch({

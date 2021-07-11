@@ -91,10 +91,11 @@ const routes = [
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   
   //{ path: '/students/all-students', name: 'All Students', component: AllStudents, exact: true },
-  { path: '/profile', name: 'Profile', component: AddNewStudent},
+  
   { path: '/faculty/classes', exact: true, name: 'FacultyDashboard', component: FacultyDashboard },
   { path: '/faculty/classes/attendance/today/:id', name: 'TodayAttendance', component: TodayAttendance },
   { path: '/faculty/classes/attendance/:id', name: 'ClassAttendance', component: ClassAttendance },
+  { path: '/student/profile', exact: true, name: 'Profile', component: AddNewStudent},
   { path: '/student/classes', exact: true, name: 'StudentDashboard', component: StudentDashboard },
   { path: '/student/classes/enroll', name: 'Enroll', component: Enroll },
   { path: '/student/classes/attendance/:id', name: 'Attendance', component: Attendance },

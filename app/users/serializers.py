@@ -64,8 +64,17 @@ class TokenSerializer(serializers.ModelSerializer):
         is_teacher = serializer_data.get('is_teacher')
         return {
             'is_student': is_student,
-            'is_teacher': is_teacher
+            'is_teacher': is_teacher,
+     
         }
+
+    # def get_first_name(self, obj):
+    #     serializer_data = UserSerializer(
+    #         obj.user
+    #     ).data
+    #     first_name = serializer_data.get('first_name')
+
+    #     return first_name
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -73,6 +82,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
+        depth = 1
 
     def create(self, validated_data):
         registration_no = validated_data.get('registration_no')
@@ -84,8 +94,8 @@ class StudentSerializer(serializers.ModelSerializer):
             user=user,
             email=email,
             registration_no=registration_no,
-            semester= semester,
-            section= section
+            semester=semester,
+            section=section
         )
         create_person(registration_no)
 

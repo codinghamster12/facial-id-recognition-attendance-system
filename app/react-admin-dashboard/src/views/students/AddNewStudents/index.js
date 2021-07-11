@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CCard,
@@ -32,68 +32,45 @@ import {
   CSwitch,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { addStudent } from "../../../actions/students";
+import { addStudent, getStudent } from "../../../actions/students";
 import { useDispatch, useSelector } from "react-redux";
-import axios from '../../../helpers/axios';
-
+import axios from "../../../helpers/axios";
 
 const AddNewStudent = () => {
-  const [Name, setName] = useState("");
   const [email_id, setEmailId] = useState("");
   const [registration_no, setRegistrationNo] = useState("");
   const [semester, setSemester] = useState("");
   const [section, setSection] = useState("");
-  // const [personID, setPersonId] = useState("");
   const [studentImages, setStudentImages] = useState([]);
   const [image, setImage] = useState("");
   const student = useSelector((state) => state.student);
-
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+
+  useEffect(() => {
+    if(student.detail.length > 0){
+      setFirstName(student.detail[0].user.first_name)
+      setLastName(student.detail[0].user.last_name)
+
+    }
+  }, []);
 
   const submitForm = (e) => {
     e.preventDefault();
     console.log();
-    // console.log(Name.value.match('/^[-+]?[0-9]+$/'))
 
-    // if (Name === "") {
-    //   alert("Name is required");
-    // } else if (!/^[a-zA-Z ]*$/.test(Name)) {
-    //   alert("Please enter a correct Name.");
-    // } else if (Enrollment_No === "") {
-    //   alert("Enrollment No is required");
-    // } else if (!/^[0-9]+(-[0-9]+)+$/.test(Enrollment_No)) {
-    //   alert("Please enter a correct enrollment number");
-    // } else if (registration_no === "") {
-    //   alert("Registration No is required");
-    // } else if (!/^[0-9]+$/.test(registration_no)) {
-    //   alert("Please enter a correct registration number.");
-    // } else if (Semester === "") {
-    //   alert("Semester is required");
-    // } else if (Section === "") {
-    //   alert("Section is required");
-    // } else if (Course_Name === "") {
-    //   alert("Course Name is required");
-    // } else if (Course_Id === "") {
-    //   alert("Course Id is required");
-    // }
-    const user= localStorage.getItem('user')
-    
+    const user = localStorage.getItem("user");
+
     const form = new FormData();
-    // form.append("Name", Name);
-    // form.append("Enrollment_No", Enrollment_No);
-    form.append("email",email_id)
+
+    form.append("email", email_id);
     form.append("registration_no", registration_no);
     form.append("user", user);
     form.append("semester", semester);
     form.append("section", section);
-    // form.append("personID", personID);
-
-    
-    // form.append("Semester", Semester);
-    // form.append("Section", Section);
-    // form.append("Course_Name", Course_Name);
-    // form.append("Course_Id", Course_Id);
-
     for (let image of studentImages) {
       form.append(`image_${image.reg_no}`, image);
     }
@@ -113,7 +90,6 @@ const AddNewStudent = () => {
 
     dispatch(addStudent(form));
     console.log(student);
-    
   };
 
   const handleStudentImages = (e) => {
@@ -122,35 +98,43 @@ const AddNewStudent = () => {
 
   const addImages = () => {
     setImage("1");
-    const token= localStorage.getItem('token')
+    const token = localStorage.getItem("token");
     // const headers= {
     //     'Authorization': `Token ${token}`
     // }
     // console.log(headers)
-    const reg_no= {
-      registration_no
-    }
+    const reg_no = {
+      registration_no,
+    };
     axios
-    .post(`/students/images/`,JSON.stringify(reg_no),{headers: { 'Authorization': `Token ${token}`}},)
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => console.log(err));
+      .post(`/students/images/`, JSON.stringify(reg_no), {
+        headers: { Authorization: `Token ${token}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
     // console.log(JSON.stringify(reg_no))
   };
 
+  // {console.log(student.detail[0])}
+
   return (
+    <CRow className="justify-content-center">
+        <CCol xs="12" lg="10">
     <CCard>
-      <CCardHeader style={{fontSize: '26px', fontWeight: '700'}}>Complete your Profile
-      <CButton
-              type="button"
-              size="md"
-              color="success"
-              onClick={addImages}
-              style={{float: 'right'}}
-            >
-              <CIcon name="cil-scrubber" /> Take Images
-            </CButton></CCardHeader>
+      <CCardHeader style={{fontSize: '28px', fontWeight: 700, letterSpacing: '0.2rem'}}>
+        Complete your Profile
+        <CButton
+          type="button"
+          size="md"
+          color="success"
+          onClick={addImages}
+          style={{ float: "right" , letterSpacing: '0.2rem'}}
+        >
+          <CIcon name="cil-camera" /> SNAP
+        </CButton>
+      </CCardHeader>
       <CCardBody>
         <CForm action="" method="post" onSubmit={submitForm}>
           {/* <CFormGroup>
@@ -167,11 +151,12 @@ const AddNewStudent = () => {
           <CFormGroup row className="my-0">
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="nf-firstname">First Name</CLabel>
+                <CLabel htmlFor="nf-firstname" style={{fontWeight: 500}}>First Name</CLabel>
                 <CInput
                   type="text"
                   id="nf-firstname"
                   name="nf-firstname"
+                  value={firstName}
                   placeholder="First Name"
                   autoComplete="first_name"
                   // onChange={(e) => setEmailId(e.target.value)}
@@ -180,11 +165,12 @@ const AddNewStudent = () => {
             </CCol>
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="nf-lastname">Last Name</CLabel>
+                <CLabel htmlFor="nf-lastname" style={{fontWeight: 500}}>Last Name</CLabel>
                 <CInput
                   type="text"
                   id="nf-lastname"
                   name="nf-lastname"
+                  value={lastName}
                   placeholder="Last Name"
                   autoComplete="last_name"
                   // onChange={(e) => setRegistrationNo(e.target.value)}
@@ -195,7 +181,7 @@ const AddNewStudent = () => {
           <CFormGroup row className="my-0">
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="nf-emailid">Parent Email Address</CLabel>
+                <CLabel htmlFor="nf-emailid" style={{fontWeight: 500}}>Parent Email Address</CLabel>
                 <CInput
                   type="text"
                   id="nf-emailid"
@@ -208,7 +194,7 @@ const AddNewStudent = () => {
             </CCol>
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="nf-registrationno">Registration No</CLabel>
+                <CLabel htmlFor="nf-registrationno" style={{fontWeight: 500}}>Registration No</CLabel>
                 <CInput
                   type="text"
                   id="nf-registrationno"
@@ -224,7 +210,7 @@ const AddNewStudent = () => {
           <CFormGroup row className="my-0">
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="select">Select Semester</CLabel>
+                <CLabel htmlFor="select" style={{fontWeight: 500}}>Select Semester</CLabel>
                 <CSelect
                   custom
                   name="select"
@@ -245,7 +231,7 @@ const AddNewStudent = () => {
             </CCol>
             <CCol xs="6">
               <CFormGroup>
-                <CLabel htmlFor="select">Select Section</CLabel>
+                <CLabel htmlFor="select" style={{fontWeight: 500}}>Select Section</CLabel>
                 <CSelect
                   custom
                   name="select"
@@ -260,7 +246,6 @@ const AddNewStudent = () => {
             </CCol>
           </CFormGroup>
 
-          
           {/* <CFormGroup row>
             <CCol md="3">
               <CLabel>Add Images</CLabel>
@@ -285,11 +270,8 @@ const AddNewStudent = () => {
             </CCol>
           </CFormGroup> */}
           <CCardFooter>
-            
-      
-            
-            <CButton type="submit" size="md" color="primary" disabled={!image}>
-              <CIcon name="cil-scrubber" /> Submit
+            <CButton type="submit" size="md" color="primary" disabled={!image} style={{letterSpacing: '0.2rem'}}>
+             SUBMIT
             </CButton>{" "}
             {/* <CButton type="reset" size="sm" color="danger">
               <CIcon name="cil-ban" /> Reset
@@ -298,6 +280,8 @@ const AddNewStudent = () => {
         </CForm>
       </CCardBody>
     </CCard>
+    </CCol>
+    </CRow>
   );
 };
 

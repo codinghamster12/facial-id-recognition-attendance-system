@@ -1,5 +1,5 @@
 import axios from "../helpers/axios";
-import { authConstants } from "./constants";
+import { authConstants, studentConstants } from "./constants";
 
 export const login = (user) => {
   return async (dispatch) => {
@@ -13,9 +13,10 @@ export const login = (user) => {
 
       if (res.status == 200) {
 
-        const { key, user  } = res.data;
+        const { key } = res.data;
+        const user= res.data;
         localStorage.setItem("token", key);
-        localStorage.setItem("user", user);
+        localStorage.setItem("user", JSON.stringify(user));
         dispatch({
           type: authConstants.LOGIN_SUCCESS,
           payload: {
@@ -24,6 +25,7 @@ export const login = (user) => {
           },
         });
       }
+      return res.data;
     } catch (error) {
       if (error.response.status == 400) {
         dispatch({
@@ -40,11 +42,13 @@ export const login = (user) => {
 export const isUserLoggedIn = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
+    const user= JSON.parse(localStorage.getItem("user"))
     if (token) {
       dispatch({
         type: authConstants.LOGIN_SUCCESS,
         payload: {
           token,
+          user
         },
       });
     }

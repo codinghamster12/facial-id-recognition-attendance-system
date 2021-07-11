@@ -3,7 +3,7 @@ import { HashRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
 import './App.css'
 import { useDispatch, useSelector } from "react-redux";
-import { getClasses, isUserLoggedIn } from "./actions";
+import { getClasses, isUserLoggedIn, getStudent } from "./actions";
 import PrivateRoute from './views/HOC/PrivateRoute'
 
 
@@ -28,15 +28,19 @@ const Landing = React.lazy(() => import("./views/pages/Landing/Landing"));
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const student = useSelector((state) => state.student);
 
   useEffect(() => {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
     if(auth.authenticate){
+      const id= auth.user.user
       dispatch(getClasses())
+      dispatch(getStudent(id))
 
     }
+    
     
   }, [auth.authenticate]);
 

@@ -1,6 +1,7 @@
+from rest_framework.generics import ListAPIView
 from api.add_student import addImages
 from rest_framework import viewsets
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import User, Student
@@ -13,9 +14,26 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
 
-class StudentViewset(viewsets.ModelViewSet):
-    queryset= Student.objects.all()
-    serializer_class= StudentSerializer
+class StudentList(ListAPIView):
+    serializer_class = StudentSerializer
+    def get_queryset(self, *args, **kwargs):
+        students = Student.objects.all()
+        return students 
+    
+
+class StudentDetail(ListAPIView):
+    serializer_class = StudentSerializer
+    def get_queryset(self, *args, **kwargs):
+        user_id= self.kwargs['id']
+        student = Student.objects.filter(user=user_id)
+        return student 
+    
+
+   
+
+    
+
+
 
     
 

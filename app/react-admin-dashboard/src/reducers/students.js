@@ -1,6 +1,7 @@
 import { studentConstants } from "../actions/constants";
 
 const initState = {
+  detail:[],
   students: [],
   error: null,
   message: null
@@ -27,6 +28,27 @@ export default (state = initState, action) => {
       };
       break;
     case studentConstants.GET_STUDENTS_FAILURE:
+      state = {
+        ...state,
+        error: action.payload.error,
+        loading: false,
+      };
+      break;
+
+      case studentConstants.GET_STUDENT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case studentConstants.GET_STUDENT_SUCCESS:
+      state = {
+        ...state,
+        detail: action.payload.student,
+        loading: false,
+      };
+      break;
+    case studentConstants.GET_STUDENT_FAILURE:
       state = {
         ...state,
         error: action.payload.error,
