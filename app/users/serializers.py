@@ -82,7 +82,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
-        depth = 1
+        # depth = 1
 
     def create(self, validated_data):
         registration_no = validated_data.get('registration_no')

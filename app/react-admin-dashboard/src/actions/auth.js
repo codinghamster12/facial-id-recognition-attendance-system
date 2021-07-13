@@ -13,15 +13,17 @@ export const login = (user) => {
 
       if (res.status == 200) {
 
-        const { key } = res.data;
-        const user= res.data;
+        const { key, user } = res.data;
+        const person= res.data;
         localStorage.setItem("token", key);
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", user);
+        localStorage.setItem("person", JSON.stringify(person));
+
         dispatch({
           type: authConstants.LOGIN_SUCCESS,
           payload: {
             user: res.data,
-            
+            person
           },
         });
       }
@@ -42,12 +44,15 @@ export const login = (user) => {
 export const isUserLoggedIn = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
-    const user= JSON.parse(localStorage.getItem("user"))
+    const person= JSON.parse(localStorage.getItem("person"))
+    const user= localStorage.getItem("user")
+
     if (token) {
       dispatch({
         type: authConstants.LOGIN_SUCCESS,
         payload: {
           token,
+          person,
           user
         },
       });

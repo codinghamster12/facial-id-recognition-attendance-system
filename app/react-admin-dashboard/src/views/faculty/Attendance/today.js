@@ -14,6 +14,7 @@ import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import Modal from "../../../components/Modals";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   getClasses,
   getTodayAttendance,
@@ -30,6 +31,16 @@ const TodayAttendance = (res) => {
   const dispatch = useDispatch();
   const id = res.match.params["id"];
   var attendance_list = [];
+  let history = useHistory();
+
+  const goBack = () => {
+    let path = "/faculty/classes/";
+    history.push(path);
+  };
+
+  function refreshPage() {
+    window.location.reload();
+  }
 
   const handleChange = (e, id, classatd) => {
     // setTargets({
@@ -39,11 +50,10 @@ const TodayAttendance = (res) => {
     var isEntered = e.target.value == `present${id}` ? true : false;
     obj["id"] = id;
     obj["isEntered"] = isEntered;
-    if(isEntered){
-      obj['classatd'] = 100
-    }
-    else{
-      obj['classatd'] = 0
+    if (isEntered) {
+      obj["classatd"] = 100;
+    } else {
+      obj["classatd"] = 0;
     }
     attendance_list.push(obj);
     console.log(attendance_list);
@@ -53,9 +63,19 @@ const TodayAttendance = (res) => {
     setShow(true);
   };
 
+  const handleClickClose = () => {
+    setShow(false);
+  };
+
   const displayModal = () => {
     return (
-      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"}>
+      <Modal
+        show={show}
+        setShow={setShow}
+        color={"success"}
+        title={"SUCCESS"}
+        onClick={refreshPage}
+      >
         Attendance updated successfully
       </Modal>
     );
@@ -102,6 +122,20 @@ const TodayAttendance = (res) => {
 
   return (
     <>
+      <div>
+        <CButton
+          type="submit"
+          size="md"
+          color="secondary"
+          onClick={goBack}
+          style={{ float: "left" }}
+        >
+          <CIcon name="cil-arrow-thick-left" />
+        </CButton>
+      </div>
+      <br />
+      <div></div>
+      <br />
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -112,49 +146,46 @@ const TodayAttendance = (res) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {console.log(data.attendance)}
-            {data.attendance && data.attendance.length > 0 
-              ? data.attendance.map(
-                  ({ id, student_id, classatd, isEntered }) => {
-                    return (
-                      <TableRow key={id}>
-                        <TableCell component="th" scope="row">
-                          <p style={{fontSize: '12px', color: 'red'}}>
-                            {classatd > 0 && classatd < 34
-                              ? "Student was present in only one of the snaps."
-                              : null}
-                          </p>
-                          {`${student_id.first_name} ${student_id.last_name}`}
-                        </TableCell>
-                        <TableCell>
-                          <RadioGroup
-                            row
-                            aria-label={`attendance${id}`}
-                            name={`attendance${id}`}
-                            value={targets[`attendance${id}`]}
-                            onChange={(e) => handleChange(e, id, classatd)}
-                            defaultValue={
-                              isEntered ? `present${id}` : `absent${id}`
-                            }
-                          >
-                            <FormControlLabel
-                              value={`present${id}`}
-                              control={<Radio />}
-                              label="Present"
-                            />
-                            <FormControlLabel
-                              value={`absent${id}`}
-                              control={<Radio />}
-                              label="Absent"
-                            />
-                          </RadioGroup>
-                        </TableCell>
-                        {/* <TableCell align="right">{row.carbs}</TableCell>
+            {data.today && data.today.length > 0
+              ? data.today.map(({ id, student_id, classatd, isEntered }) => {
+                  return (
+                    <TableRow key={id}>
+                      <TableCell component="th" scope="row">
+                        <p style={{ fontSize: "12px", color: "red" }}>
+                          {classatd > 0 && classatd < 34
+                            ? "Student was present in only one of the snaps."
+                            : null}
+                        </p>
+                        {`${student_id.first_name} ${student_id.last_name}`}
+                      </TableCell>
+                      <TableCell>
+                        <RadioGroup
+                          row
+                          aria-label={`attendance${id}`}
+                          name={`attendance${id}`}
+                          value={targets[`attendance${id}`]}
+                          onChange={(e) => handleChange(e, id, classatd)}
+                          defaultValue={
+                            isEntered ? `present${id}` : `absent${id}`
+                          }
+                        >
+                          <FormControlLabel
+                            value={`present${id}`}
+                            control={<Radio />}
+                            label="Present"
+                          />
+                          <FormControlLabel
+                            value={`absent${id}`}
+                            control={<Radio />}
+                            label="Absent"
+                          />
+                        </RadioGroup>
+                      </TableCell>
+                      {/* <TableCell align="right">{row.carbs}</TableCell>
               <TableCell align="right">{row.protein}</TableCell> */}
-                      </TableRow>
-                    );
-                  }
-                )
+                    </TableRow>
+                  );
+                })
               : null}
           </TableBody>
         </Table>
@@ -164,9 +195,11 @@ const TodayAttendance = (res) => {
         size="md"
         color="primary"
         onClick={updateAttendance}
-        style={{ float: "right", marginTop: "10px" }}
+        style={{ float: "right", marginTop: "10px", letterSpacing: '0.2rem' }}
+        
+   
       >
-        <CIcon name="cil-scrubber" /> Submit
+        SUBMIT
       </CButton>{" "}
       {displayModal()}
     </>

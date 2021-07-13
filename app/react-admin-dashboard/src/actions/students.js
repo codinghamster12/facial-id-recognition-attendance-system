@@ -48,6 +48,7 @@ export const addStudent = (form) => {
         dispatch({
             type: studentConstants.ADD_STUDENTS_REQUEST
         })
+        console.log('ok')
         
         const token= localStorage.getItem('token')
         const headers= {
@@ -59,14 +60,15 @@ export const addStudent = (form) => {
         try{
             const res= await axios.post(`/students/`, form, { headers: headers })
             if(res.status == 201){
+                console.log('ok')
                 dispatch({
                     type: studentConstants.ADD_STUDENTS_SUCCESS,
                     payload:{
-                        message: 'Student created succesfully'
+                        message: 'Student created successfully'
                     }
 
                 })
-                alert('Student created successfully')
+               
             }
 
         }

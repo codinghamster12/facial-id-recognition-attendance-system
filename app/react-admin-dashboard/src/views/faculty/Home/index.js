@@ -196,8 +196,8 @@ const Dashboard = () => {
                       <CDropdownItem onClick={() => viewAttendance(id)}>
                         View Attendance Summary
                       </CDropdownItem>
-                      <CDropdownDivider />
-                      <CDropdownItem onClick={()=>exportFile(id)}>Export</CDropdownItem>
+                      {/* <CDropdownDivider />
+                      <CDropdownItem onClick={()=>exportFile(id)}>Export</CDropdownItem> */}
                     </CDropdownMenu>
                   </CDropdown>
                 

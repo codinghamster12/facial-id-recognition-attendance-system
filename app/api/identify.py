@@ -28,7 +28,6 @@ def getDateColumn(sheet):
 
 counts = dict()
 def openSheet(class_id,token):
-
     headers = { 'Authorization': 'Token {}'.format(token)}
 
 #get current date
@@ -93,6 +92,7 @@ def openSheet(class_id,token):
         if rn is not None:
             rn = rn[-2:]
             print(rn[-2:])
+            
             if attend[int(rn)] != 0:
                 col = getDateColumn(sheet)
                 sheet['%s%s' % (col, str(row))] = 1

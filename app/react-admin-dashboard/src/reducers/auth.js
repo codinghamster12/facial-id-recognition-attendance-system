@@ -6,6 +6,7 @@ const initState= {
     authenticating: false,
     error: null,
     user: {}, 
+    person:{}
     
   
     
@@ -27,6 +28,7 @@ export default(state= initState, action)=>{
                 authenticate: true,
                 user: action.payload.user,
                 token: action.payload.token,
+                person: action.payload.person,
                 authenticating: false,
             }
         

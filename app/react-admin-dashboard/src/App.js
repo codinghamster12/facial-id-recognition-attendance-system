@@ -35,7 +35,7 @@ function App() {
       dispatch(isUserLoggedIn());
     }
     if(auth.authenticate){
-      const id= auth.user.user
+      const id= auth.person.user
       dispatch(getClasses())
       dispatch(getStudent(id))
 

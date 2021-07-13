@@ -38,6 +38,26 @@ export default(state= initState, action)=>{
 
             }
             break;
+        case userConstants.GET_USER_REQUEST:
+            state = {
+                ...state,
+              
+            };
+            break;
+        case userConstants.GET_USER_SUCCESS:
+            state = {
+                ...state,
+                user: action.payload.user,
+                
+            };
+            break;
+        case userConstants.GET_USER_FAILURE:
+            state = {
+                ...state,
+                error: action.payload.error,
+                
+            };
+            break;
         
         
         

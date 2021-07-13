@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { signup } from "../../../actions";
 import { useHistory } from "react-router-dom";
 import {
@@ -37,6 +37,25 @@ const Register = () => {
   let history = useHistory();
 
   const dispatch = useDispatch();
+ 
+
+  function refreshPage() {
+    window.location.reload();
+  }
+  useEffect(() => {
+   
+    console.log(userstate.message)
+    if(userstate.message!=null)
+    {
+    if(userstate.message=="User registered successfully"){
+      handleClickOpen();
+    }
+
+  }
+  
+ 
+   
+  }, [userstate.message]);
 
   const handleClickOpen = () => {
     setShow(true);
@@ -44,8 +63,8 @@ const Register = () => {
 
   const displayModal = () => {
     return (
-      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"}>
-        Course registered successfully
+      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"} onClick={refreshPage}>
+        User registered successfully
       </Modal>
     );
   };
@@ -65,7 +84,6 @@ const Register = () => {
 
     // console.log(user);
     dispatch(signup(user));
-    console.log(userstate);
   };
 
   const setUserType = (type) => {
@@ -226,6 +244,7 @@ const Register = () => {
                       <CButton color="primary" type="submit" block>
                         Register
                       </CButton>
+                      
                       <CCol className="text-center">
                         <p style={{ fontsize: "30px" }} className="text-muted">
                           Already a user?

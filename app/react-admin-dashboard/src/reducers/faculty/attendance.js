@@ -1,6 +1,7 @@
 import { attendanceConstants } from "../../actions/constants";
 
 const initState = {
+  today:[],
   attendance: [],
   error: null,
   message: null
@@ -46,7 +47,7 @@ export default (state = initState, action) => {
       case attendanceConstants.TODAY_ATTENDANCE_SUCCESS:
         state = {
           ...state,
-          attendance: action.payload.attendance,
+          today: action.payload.today,
           loading: false,
         };
         console.log(state)

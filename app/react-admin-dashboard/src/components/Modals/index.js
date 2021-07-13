@@ -22,6 +22,7 @@ const Modals = (props) => {
     show={props.show} 
     onClose={() => props.setShow(!props.show)}
     color={props.color}
+    
   >
     <CModalHeader closeButton>
       <CModalTitle>{props.title}</CModalTitle>
@@ -29,6 +30,9 @@ const Modals = (props) => {
     <CModalBody>
       {props.children}
     </CModalBody>
+    <CModalFooter>
+    <CButton color="success" onClick={props.onClick}>OK</CButton>
+  </CModalFooter>
     
   </CModal>
 

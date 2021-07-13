@@ -33,8 +33,11 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { addStudent, getStudent } from "../../../actions/students";
+import { getUser } from "../../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../../helpers/axios";
+import Modal from "../../../components/Modals";
+import { useHistory } from "react-router-dom";
 
 const AddNewStudent = () => {
   const [email_id, setEmailId] = useState("");
@@ -43,25 +46,75 @@ const AddNewStudent = () => {
   const [section, setSection] = useState("");
   const [studentImages, setStudentImages] = useState([]);
   const [image, setImage] = useState("");
+  const [submitted, setsubmitted] = useState("");
   const student = useSelector((state) => state.student);
+  const userstate = useSelector((state) => state.user);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  let history = useHistory();
 
+  const [show, setShow] = useState(false);
+
+  const handleClickOpen = () => {
+    setShow(true);
+  };
+
+  
+  const ClassesPage = () => {
+    let path = "/student/classes/";
+    history.push(path);
+  };
+
+  const displayModal = () => {
+    return (
+      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"} onClick={ClassesPage}>
+        Student profile updated successfully
+       
+      </Modal>
+  
+    
+    );
+  };
 
   useEffect(() => {
-    if(student.detail.length > 0){
-      setFirstName(student.detail[0].user.first_name)
-      setLastName(student.detail[0].user.last_name)
+   
+    const user = localStorage.getItem("user");
+    if(Object.keys(userstate.user).length === 0){
+      dispatch(getUser(user));
 
     }
-  }, []);
+    if(userstate.user.length > 0){
+      setFirstName(userstate.user[0].first_name)
+      setLastName(userstate.user[0].last_name)
+    }
+  
+   
+   
+  }, [userstate.user]);
+
+  // useEffect(() => {
+   
+  //   console.log(student.message)
+  //   if(student.message!=null)
+  //   {
+  //   if(student.message=="Student created successfully"){
+  //     handleClickOpen();
+  //   }
+    
+  // }
+  
+   
+   
+  // }, [student.message]);
 
   const submitForm = (e) => {
+   
     e.preventDefault();
-    console.log();
+    console.log("hello world");
 
+   
     const user = localStorage.getItem("user");
 
     const form = new FormData();
@@ -73,23 +126,16 @@ const AddNewStudent = () => {
     form.append("section", section);
     for (let image of studentImages) {
       form.append(`image_${image.reg_no}`, image);
+    
+
     }
 
-    // console.log(images)
-    // const student={
-    //   Name,
-    //   Enrollment_No,
-    //   Registration_No,
-    //   Semester,
-    //   Section,
-    //   Course_Name,
-    //   Course_Id,
-    //   images
-
-    // }
-
     dispatch(addStudent(form));
-    console.log(student);
+    handleClickOpen()
+
+    
+  
+    
   };
 
   const handleStudentImages = (e) => {
@@ -111,7 +157,7 @@ const AddNewStudent = () => {
         headers: { Authorization: `Token ${token}` },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log('Response', res.data);
       })
       .catch((err) => console.log(err));
     // console.log(JSON.stringify(reg_no))
@@ -120,11 +166,15 @@ const AddNewStudent = () => {
   // {console.log(student.detail[0])}
 
   return (
+    <>
+    
+            
     <CRow className="justify-content-center">
         <CCol xs="12" lg="10">
+       
     <CCard>
       <CCardHeader style={{fontSize: '28px', fontWeight: 700, letterSpacing: '0.2rem'}}>
-        Complete your Profile
+        COMPLETE YOUR PROFILE
         <CButton
           type="button"
           size="md"
@@ -136,7 +186,7 @@ const AddNewStudent = () => {
         </CButton>
       </CCardHeader>
       <CCardBody>
-        <CForm action="" method="post" onSubmit={submitForm}>
+        <CForm onSubmit={submitForm}>
           {/* <CFormGroup>
             <CLabel htmlFor="nf-name">First Name</CLabel>
             <CInput
@@ -191,6 +241,11 @@ const AddNewStudent = () => {
                   onChange={(e) => setEmailId(e.target.value)}
                 />
               </CFormGroup>
+              <div style={{ color: "red" }}>
+                            {student.error
+                              ? student.error.email
+                              : null}
+                          </div>
             </CCol>
             <CCol xs="6">
               <CFormGroup>
@@ -204,8 +259,16 @@ const AddNewStudent = () => {
                   onChange={(e) => setRegistrationNo(e.target.value)}
                 />
               </CFormGroup>
+              <div style={{ color: "red" }}>
+                            {student.error
+                              ? student.error.registration_no
+                              : null}
+                          </div>
             </CCol>
+          
+
           </CFormGroup>
+
 
           <CFormGroup row className="my-0">
             <CCol xs="6">
@@ -270,9 +333,12 @@ const AddNewStudent = () => {
             </CCol>
           </CFormGroup> */}
           <CCardFooter>
-            <CButton type="submit" size="md" color="primary" disabled={!image} style={{letterSpacing: '0.2rem'}}>
+            <CButton type="submit" size="md" color="primary" style={{letterSpacing: '0.2rem'}}>
              SUBMIT
-            </CButton>{" "}
+            </CButton>
+            <CButton type="button" size="md" color="primary" style={{letterSpacing: '0.2rem'}} onClick={handleClickOpen}>
+             CLICK
+            </CButton>
             {/* <CButton type="reset" size="sm" color="danger">
               <CIcon name="cil-ban" /> Reset
             </CButton> */}
@@ -280,8 +346,11 @@ const AddNewStudent = () => {
         </CForm>
       </CCardBody>
     </CCard>
+   
     </CCol>
     </CRow>
+    {displayModal()}
+    </>
   );
 };
 

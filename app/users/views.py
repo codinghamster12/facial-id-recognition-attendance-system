@@ -9,9 +9,24 @@ from .serializers import UserSerializer, StudentSerializer
 import json
 
 
-class UserViewSet(viewsets.ModelViewSet):
+
+class UserList(ListAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    def get_queryset(self, *args, **kwargs):
+        users = User.objects.all()
+        return users 
+    
+
+class UserDetail(ListAPIView):
+    serializer_class = UserSerializer
+    def get_queryset(self, *args, **kwargs):
+        user_id= self.kwargs['id']
+        user = User.objects.filter(id=user_id)
+        return user
+    
+class StudentViewset(viewsets.ModelViewSet):
+    serializer_class= StudentSerializer
+    queryset= Student.objects.all()
 
 
 class StudentList(ListAPIView):

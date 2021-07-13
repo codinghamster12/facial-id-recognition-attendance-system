@@ -20,6 +20,7 @@ const Enroll = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.class);
   const [show, setShow] = useState(false);
+  let history = useHistory();
   // const [id, setId] = useState("");
 
   useEffect(() => {
@@ -27,61 +28,73 @@ const Enroll = () => {
     console.log(data);
   }, []);
 
+  const goBack = () => {
+    let path = "/student/classes/";
+    history.push(path);
+  };
+
   const handleClickOpen = () => {
     setShow(true);
   };
 
   const displayModal = () => {
     return (
-      <Modal show={show} setShow={setShow} color={"success"} title={"SUCCESS"}>
+      <Modal
+        show={show}
+        setShow={setShow}
+        color={"success"}
+        title={"SUCCESS"}
+        onClick={refreshPage}
+      >
         Course registered successfully
       </Modal>
     );
   };
 
-  
-    function refreshPage() {
-      window.location.reload();
-    }
+  function refreshPage() {
+    window.location.reload();
+  }
 
-   
+  const enrollStudent = (e) => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
 
-
-    const enrollStudent = (e) => {
-    
-      const token = localStorage.getItem("token");
-      const user = localStorage.getItem("user");
-   
-      const headers = {
-        Authorization: `Token ${token}`,
-      };
-  
-      let form_data = new FormData();
-      form_data.append("student_id", user);
-      form_data.append("class_id", e.target.id);
-  
-      axios
-        .post(`/classes/enroll/enroll-student/`, form_data, { headers: headers })
-        .then((res) => {
-          // console.log(res.data);
-          // console.log(res)
-          if(res.status == 201){
-            handleClickOpen();
-          }
-          
-         
-        })
-        .catch((err) => console.log(err));
-
-    {refreshPage()}
-  
-     
+    const headers = {
+      Authorization: `Token ${token}`,
     };
-  
-   
-    return (
-    
-       <>
+
+    let form_data = new FormData();
+    form_data.append("student_id", user);
+    form_data.append("class_id", e.target.id);
+
+    axios
+      .post(`/classes/enroll/enroll-student/`, form_data, { headers: headers })
+      .then((res) => {
+        // console.log(res.data);
+        // console.log(res)
+        if (res.status == 201) {
+          handleClickOpen();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <>
+      <div>
+        <CButton
+          type="submit"
+          size="md"
+          color="secondary"
+          onClick={goBack}
+          style={{ float: "left" }}
+        >
+          <CIcon name="cil-arrow-thick-left" />
+        </CButton>
+      </div>
+      <br />
+      <div></div>
+      <br />
       <CRow className="justify-content-center">
         <CCol xs="12" lg="10">
           <CCard>
@@ -153,11 +166,12 @@ const Enroll = () => {
                             <CButton
                               id={id}
                               type="button"
-                              size="lg"
+                              size="sm"
                               color="success"
+                              style={{letterSpacing: '0.2rem'}}
                               onClick={(e) => enrollStudent(e)}
                             >
-                              <CIcon name="cil-scrubber" /> Register
+                              <CIcon name="cil-scrubber" /> REGISTER
                             </CButton>
                           </td>
                         </tr>

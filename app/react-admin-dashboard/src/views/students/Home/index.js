@@ -104,7 +104,7 @@ const Dashboard = (props) => {
                             color="primary"
                             style={{letterSpacing: '0.2rem'}}
                           >
-                            <CIcon content={freeSet.cilEye} /> VIEW
+                             VIEW
                           </CButton>
                         </td>
                       </tr>

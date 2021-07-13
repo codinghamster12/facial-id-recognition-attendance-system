@@ -29,6 +29,7 @@ import facial from "../../../assets/facial.jpg";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading,setLoading] = useState(false);
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -36,18 +37,34 @@ const Login = () => {
   const student = useSelector((state) => state.student);
 
   setTimeout(() => {
+    
     if (auth.authenticate) {
+    
       if (auth.user.user_type.is_student == true) {
         if (student.detail && student.detail.length > 0) {
          history.push('/student/classes')
         } else {
+        
           history.push('/student/profile')
         }
       } else {
+       
         history.push('/faculty/classes')
       }
     }
   }, 2000);
+
+  useEffect(() => {
+   
+   
+  
+    setLoading(false);
+  
+  
+   
+   
+  }, [auth.error]);
+
   
 
 
@@ -72,12 +89,14 @@ const Login = () => {
   };
 
   const userLogin = (e) => {
+    setLoading(true);
     e.preventDefault();
     const user = {
       username,
       password,
     };
     dispatch(login(user));
+    
     // if(!student.detail){
     //   const id = auth.user.user;
     //   dispatch(getStudent(id));
@@ -159,8 +178,17 @@ const Login = () => {
                         </CButton>
                       </CCol>
                     </CRow>
+                    {loading?null:(<div style={{ color: "red" }}>
                     {auth.error ? Object.values(auth.error)[0] : null}
+                    </div>)}
+                    
                   </CForm>
+                  {loading?( <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>):null}
+                 
                 </CCardBody>
               </CCard>
             </CCardGroup>

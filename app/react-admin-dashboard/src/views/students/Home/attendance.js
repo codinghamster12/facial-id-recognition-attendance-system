@@ -9,6 +9,7 @@ import { CButton } from '@coreui/react'
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import CIcon from '@coreui/icons-react'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   tableRow:{
@@ -27,6 +28,7 @@ const Attendance = (res) => {
   const [classObj, setClassObj] = useState({});
   const [show, setShow] = useState(false)
   const styles= useStyles();
+  let history = useHistory();
 
 
   // var course,course_credit,stclass;
@@ -67,7 +69,10 @@ const Attendance = (res) => {
 
   }, []);
 
-
+  const goBack = () => {
+    let path = "/student/classes/";
+    history.push(path);
+  };
 
   const classInfo =  () => {
     let classObj={}
@@ -168,9 +173,13 @@ const Attendance = (res) => {
     setShow(true)
   }
 
+  const handleClickClose = () => {
+    setShow(false)
+  }
+
   const displayModal = () => {
     return (
-      <Modal show={show} setShow={setShow} color={'secondary'} title={'Chart'}>
+      <Modal show={show} setShow={setShow} color={'secondary'} title={'Chart'} onClick={handleClickClose}>
         <CChartDoughnut datasets={doughnut.datasets} labels={doughnut.labels} />
       </Modal>
     )
@@ -200,7 +209,23 @@ const Attendance = (res) => {
   //   }
 
   return (
+    
     <>
+          <div>
+          <CButton
+        type="submit"
+        size="md"
+        color="secondary"
+        onClick={goBack}
+        style={{ float: 'left' }}
+      >
+        <CIcon name="cil-arrow-thick-left" />
+        
+      </CButton>
+          </div>
+          <br />
+<div></div>
+<br />
       <div style={{background: '#ffe9ec'}} className="table">
         <table className="table table-hover">
           <tbody>

@@ -126,6 +126,7 @@ export default (state = initState, action) => {
         ...state,
         error: action.payload.error
       }
+      break;
   }
   return state;
 };

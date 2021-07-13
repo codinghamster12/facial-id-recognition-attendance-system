@@ -112,7 +112,7 @@ export const getTodayAttendance = (class_id) => {
         dispatch({
           type: attendanceConstants.TODAY_ATTENDANCE_SUCCESS,
           payload: {
-            attendance: res.data,
+            today: res.data,
           },
         });
       }
