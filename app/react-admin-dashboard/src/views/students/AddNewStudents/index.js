@@ -131,7 +131,8 @@ const AddNewStudent = () => {
     }
 
     dispatch(addStudent(form));
-    handleClickOpen()
+
+    // handleClickOpen()
 
     
   
@@ -163,12 +164,27 @@ const AddNewStudent = () => {
     // console.log(JSON.stringify(reg_no))
   };
 
+  
+
   // {console.log(student.detail[0])}
 
   return (
     <>
     
-            
+      <div>
+        <CButton
+          type="submit"
+          size="md"
+          color="secondary"
+          onClick={ClassesPage}
+          style={{ float: "left" }}
+        >
+          <CIcon name="cil-arrow-thick-left" />
+        </CButton>
+      </div>
+      <br />
+      <div></div>
+      <br />      
     <CRow className="justify-content-center">
         <CCol xs="12" lg="10">
        
@@ -333,12 +349,10 @@ const AddNewStudent = () => {
             </CCol>
           </CFormGroup> */}
           <CCardFooter>
-            <CButton type="submit" size="md" color="primary" style={{letterSpacing: '0.2rem'}}>
+            <CButton type="submit" size="md" color="primary" disabled={!image} style={{letterSpacing: '0.2rem'}}>
              SUBMIT
             </CButton>
-            <CButton type="button" size="md" color="primary" style={{letterSpacing: '0.2rem'}} onClick={handleClickOpen}>
-             CLICK
-            </CButton>
+           
             {/* <CButton type="reset" size="sm" color="danger">
               <CIcon name="cil-ban" /> Reset
             </CButton> */}
