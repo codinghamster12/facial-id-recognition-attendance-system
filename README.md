@@ -1,7 +1,7 @@
 Facial Id Attendance System
 
 
-List of Software Used:
+List of Software(IDE/Framework/Libraries) Used:
 
 
 -Visual Studio 
