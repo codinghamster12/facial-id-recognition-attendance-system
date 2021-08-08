@@ -1,4 +1,4 @@
-Facial Id Attendance System
+Facial Id Attendance System Project
 
 
 List of Software(IDE/Framework/Libraries) Used:
